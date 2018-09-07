@@ -30,12 +30,37 @@ personal label matching your GitHub ID will be assigned to that issue.
 Feel free to propose issues that aren't described!
 
 
+oauthlib community rules
+========================
+
+oauthlib is a community of developers which adheres to a very simple set of
+rules.
+
+Code of Conduct
+---------------
+This project adheres to a `Code of Conduct`_ based on Django. As a community
+member you have to read and agree with it.
+
+For more information please contact us and/or visit the original
+`Django Code of Conduct`_ homepage.
+
+.. _`Code of Conduct`: https://github.com/oauthlib/oauthlib/blob/master/CODE_OF_CONDUCT.md
+.. _`Django Code of Conduct`: https://www.djangoproject.com/conduct/
+
+Code of Merit
+-------------
+Please read the community's `Code of Merit`_. Every contributor will know the
+real purpose of their contributions to this project.
+
+.. _`Code of Merit`: http://code-of-merit.org/
+
+
 Setting up topic branches and generating pull requests
 ======================================================
 
 While it's handy to provide useful code snippets in an issue, it is better for
 you as a developer to submit pull requests. By submitting pull request your
-contribution to OpenComparison will be recorded by Github.
+contribution to OAuthlib will be recorded by Github.
 
 In git it is best to isolate each topic or feature into a "topic branch". While
 individual commits allow you control over how small individual changes are made
@@ -127,7 +152,7 @@ request that fails this test suite will be **rejected**.
 Testing multiple versions of Python
 -----------------------------------
 
-OAuthLib supports Python 2.6, 2.7, 3.2, 3.3 and experimentally PyPy. Testing
+OAuthLib supports Python 2.7, 3.4, 3.5, 3.6 and PyPy. Testing
 all versions conveniently can be done using `Tox`_.
 
 .. sourcecode:: bash
@@ -149,6 +174,17 @@ version. For Ubuntu you can easily install all after adding one ppa.
 
 .. _`Tox`: https://tox.readthedocs.io/en/latest/install.html
 .. _`virtualenv`: https://virtualenv.pypa.io/en/latest/installation/
+
+Test upstream applications
+-----------------------------------
+
+Remember, OAuthLib is used by several 3rd party projects. If you think you
+submit a breaking change, confirm that other projects builds are not affected.
+
+.. sourcecode:: bash
+
+   $ make
+
 
 If you add code you need to add tests!
 --------------------------------------
@@ -207,7 +243,7 @@ How pull requests are checked, tested, and done
 
 First we pull the code into a local branch::
 
-    git remote add <submitter-github-name> git@github.com:<submitter-github-name>/opencomparison.git
+    git remote add <submitter-github-name> git@github.com:<submitter-github-name>/oauthlib.git
     git fetch <submitter-github-name>
     git checkout -b <branch-name> <submitter-github-name>/<branch-name>
 

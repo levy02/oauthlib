@@ -44,6 +44,22 @@ class ErrorResponseTest(TestCase):
         self.assertRaises(errors.InvalidRedirectURIError,
                 self.mobile.create_authorization_response, uri.format('token'), scopes=['foo'])
 
+    def test_invalid_default_redirect_uri(self):
+        uri = 'https://example.com/authorize?response_type={0}&client_id=foo'
+        self.validator.get_default_redirect_uri.return_value = "wrong"
+
+        # Authorization code grant
+        self.assertRaises(errors.InvalidRedirectURIError,
+                self.web.validate_authorization_request, uri.format('code'))
+        self.assertRaises(errors.InvalidRedirectURIError,
+                self.web.create_authorization_response, uri.format('code'), scopes=['foo'])
+
+        # Implicit grant
+        self.assertRaises(errors.InvalidRedirectURIError,
+                self.mobile.validate_authorization_request, uri.format('token'))
+        self.assertRaises(errors.InvalidRedirectURIError,
+                self.mobile.create_authorization_response, uri.format('token'), scopes=['foo'])
+
     def test_missing_redirect_uri(self):
         uri = 'https://example.com/authorize?response_type={0}&client_id=foo'
 
@@ -237,7 +253,17 @@ class ErrorResponseTest(TestCase):
 
     def test_access_denied(self):
         self.validator.authenticate_client.side_effect = self.set_client
+        self.validator.get_default_redirect_uri.return_value = 'https://i.b/cb'
         self.validator.confirm_redirect_uri.return_value = False
+        token_uri = 'https://i.b/token'
+        # Authorization code grant
+        _, body, _ = self.web.create_token_response(token_uri,
+                body='grant_type=authorization_code&code=foo')
+        self.assertEqual('invalid_request', json.loads(body)['error'])
+
+    def test_access_denied_no_default_redirecturi(self):
+        self.validator.authenticate_client.side_effect = self.set_client
+        self.validator.get_default_redirect_uri.return_value = None
         token_uri = 'https://i.b/token'
         # Authorization code grant
         _, body, _ = self.web.create_token_response(token_uri,

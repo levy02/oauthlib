@@ -39,6 +39,8 @@ class EncodingTest(TestCase):
         self.assertItemsEqual(urldecode('foo=bar@spam'), [('foo', 'bar@spam')])
         self.assertItemsEqual(urldecode('foo=bar/baz'), [('foo', 'bar/baz')])
         self.assertItemsEqual(urldecode('foo=bar?baz'), [('foo', 'bar?baz')])
+        self.assertItemsEqual(urldecode('foo=bar\'s'), [('foo', 'bar\'s')])
+        self.assertItemsEqual(urldecode('foo=$'), [('foo', '$')])
         self.assertRaises(ValueError, urldecode, 'foo bar')
         self.assertRaises(ValueError, urldecode, '%R')
         self.assertRaises(ValueError, urldecode, '%RA')
@@ -211,6 +213,11 @@ class RequestTest(TestCase):
         r = Request(URI, body=payload)
         self.assertNotIn('bar', repr(r))
         self.assertIn('<SANITIZED>', repr(r))
+
+    def test_headers_params(self):
+        r = Request(URI, headers={'token': 'foobar'}, body='token=banana')
+        self.assertEqual(r.headers['token'], 'foobar')
+        self.assertEqual(r.token, 'banana')
 
 
 class CaseInsensitiveDictTest(TestCase):
